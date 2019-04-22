@@ -1,0 +1,1 @@
+-M malta -cpu mips32r6-generic -drive file=output/images/rootfs.ext2,format=raw
