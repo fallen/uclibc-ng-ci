@@ -21,7 +21,7 @@ def handle(line, inpipe):
         time.sleep(5)
         send("cd /usr/lib/uclibc-ng-test/test\n", inpipe)
         send("sh uclibcng-testrunner.sh\n", inpipe)
-    if logged_in and line.contains('Total passed:'):
+    if logged_in and 'Total passed:' in line:
         print("uClibc-ng testsuite run is over, exiting.")
         sys.exit(0)
 
