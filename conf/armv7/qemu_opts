@@ -1,1 +1,1 @@
--M vexpress-a9 -smp 1 -m 256 -drive file=images/rootfs.ext2,if=sd,format=raw -net nic,model=lan9118 -net user -nographic
+-M vexpress-a9 -smp 1 -m 256 -drive file=images/rootfs.ext2,if=sd,format=raw -net nic,model=lan9118 -net user -nographic -dtb images/vexpress-v2p-ca9.dtb
