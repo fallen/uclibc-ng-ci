@@ -1,0 +1,1 @@
+-M SS-10 -drive file=images/rootfs.ext2,format=raw -net nic,model=lance -net user
