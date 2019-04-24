@@ -1,1 +1,1 @@
--M mpc8544ds -net nic,model=e1000 -net user
+-M mpc8544ds -net nic,model=e1000 -net user -nographic
