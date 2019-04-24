@@ -1,0 +1,1 @@
+-M pc -smp 2 -drive file=images/rootfs.ext2,if=virtio,format=raw -net nic,model=virtio -net user
