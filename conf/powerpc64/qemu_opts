@@ -1,1 +1,1 @@
--M ppce500 -cpu e5500 -m 256 drive file=images/rootfs.ext2,if=virtio,format=raw -nographic
+-M ppce500 -cpu e5500 -m 256 -drive file=images/rootfs.ext2,if=virtio,format=raw -nographic
