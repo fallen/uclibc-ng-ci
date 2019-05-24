@@ -1,0 +1,11 @@
+--- a/arch/openrisc/boot/dts/or1ksim.dts.orig	2019-05-24 19:56:01.621529262 +0200
++++ b/arch/openrisc/boot/dts/or1ksim.dts	2019-05-24 19:56:15.349189651 +0200
+@@ -17,7 +17,7 @@
+ 
+ 	memory@0 {
+ 		device_type = "memory";
+-		reg = <0x00000000 0x02000000>;
++		reg = <0x00000000 0x10000000>;
+ 	};
+ 
+ 	cpus {
