@@ -1,1 +1,1 @@
-root=/dev/vda
+root=/dev/vda console=ttyS0
