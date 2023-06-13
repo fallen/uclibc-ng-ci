@@ -65,7 +65,7 @@ def main():
     outpipename = pipename + ".out"
     inpipename = pipename + ".in"
     inpipe = open(inpipename, "w")
-    with open(outpipename, "r", 1) as p:
+    with open(outpipename, "r", 1, encoding="utf8", errors='ignore') as p:
         not_eof = True
         while not_eof:
             line = p.readline()

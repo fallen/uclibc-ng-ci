@@ -1,0 +1,28 @@
+name: CI
+
+on: push
+
+jobs:
+  build_and_valid:
+    name: Build and valid
+    strategy:
+      matrix:
+        arch: [aarch64, armv7, amd64, mips32r6, or1k, powerpc, powerpc64, sparc]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install qemu
+        run: sudo apt-get -y update; sudo apt-get install -y qemu-system-common qemu-system-mips qemu-utils qemu-system-arm qemu-block-extra qemu-system-mips qemu-system-misc qemu-system-ppc qemu-system-s390x qemu-system-sparc qemu-system-x86
+      - name: Install python3 junit_xml module
+        run: sudo apt-get -y update; sudo apt-get install -y python3-junit.xml
+      - name: Build
+        run: ./build.sh ${{ matrix.arch }}
+      - name: Valid
+        run: ./run.sh ${{ matrix.arch }}
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2.7.0
+        if: always()
+        with:
+          files: build_${{ matrix.arch }}/junit_report.xml
+          check_name: ${{ matrix.arch }} Test Results
