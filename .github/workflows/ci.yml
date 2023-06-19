@@ -1,6 +1,15 @@
 name: CI
 
-on: push
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      libc_sha1:
+        description: 'uClibc-ng SHA1 to be tested'
+      libc_test_sha1:
+        description: 'uClibc-ng-test testsuite SHA1 to run'
+      buildroot_sha1:
+        description: 'Buildroot SHA1 to build'
 
 jobs:
   build_and_valid:
@@ -17,7 +26,7 @@ jobs:
       - name: Install python3 junit_xml module
         run: sudo apt-get -y update; sudo apt-get install -y python3-junit.xml
       - name: Build
-        run: ./build.sh ${{ matrix.arch }}
+        run: ./build.sh ${{ matrix.arch }} ${{ inputs.libc_sha1 }} ${{ inputs.libc_test_sha1 }} ${{ inputs.buildroot_sha1 }}
       - name: Valid
         run: ./run.sh ${{ matrix.arch }}
       - name: Publish Test Results
