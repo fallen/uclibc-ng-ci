@@ -1,10 +1,35 @@
 #!/bin/bash
 set -x
 
-arch=$1
+while getopts "a:l:t:b:" o; do
+	case "${o}" in
+		a)
+			arch=${OPTARG}
+			;;
+		l)
+			libc_sha1=${OPTARG}
+			;;
+		t)
+			libc_test_sha1=${OPTARG}
+			;;
+		b)
+			buildroot_sha1=${OPTARG}
+			;;
+	esac
+done
+
 git clone git://git.busybox.net/buildroot
+if [ ! -z "$buildroot_sha1" ]; then
+	cd buildroot; git checkout $buildroot_sha1; cd -
+fi
 git clone https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git
+if [ ! -z "$libc_sha1" ]; then
+	cd uclibc-ng; git checkout $libc_sha1; cd -
+fi
 git clone https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng-test.git
+if [ ! -z "$libc_test_sha1" ]; then
+	cd uclibc-ng-test; git checkout $libc_test_sha1; cd -
+fi
 build_dir=$PWD/build_$arch
 buildroot_defconfig=$(cat conf/$arch/buildroot_defconfig)
 confdir=$PWD/conf/$arch/
