@@ -29,9 +29,29 @@ jobs:
         run: ./build.sh -a ${{ matrix.arch }} -l "${{ inputs.libc_sha1 }}" -t "${{ inputs.libc_test_sha1 }}" -b "${{ inputs.buildroot_sha1 }}"
       - name: Valid
         run: ./run.sh ${{ matrix.arch }}
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2.7.0
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v3
         if: always()
         with:
-          files: build_${{ matrix.arch }}/junit_report.xml
-          check_name: ${{ matrix.arch }} Test Results
+          name: ${{ matrix.arch }} Test Results (${{ github.event.workflow_run.event || github.event_name }})
+          path: build_${{ matrix.arch }}/junit_report.xml
+
+  publish_test_results:
+    name: Publish Test Results
+    needs: build_and_valid
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      # only needed unless run with comment_mode: off
+      pull-requests: write
+    if: always()
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: artifacts
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2.7.0
+        with:
+          files: "artifacts/**/*.xml"
