@@ -21,17 +21,17 @@ done
 git clone git://git.busybox.net/buildroot
 if [ ! -z "$buildroot_sha1" ]; then
 	cd buildroot; git checkout $buildroot_sha1; cd -
-	echo "Buildroot SHA1: $buildroot_sha1" >> $GITHUB_STEP_SUMMARY
+	if [ "$arch" == "aarch64" ]; then echo "Buildroot SHA1: $buildroot_sha1" >> $GITHUB_STEP_SUMMARY; fi
 fi
 git clone https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git
 if [ ! -z "$libc_sha1" ]; then
 	cd uclibc-ng; git checkout $libc_sha1; cd -
-	echo "uClibc-ng SHA1: $libc_sha1" >> $GITHUB_STEP_SUMMARY
+	if [ "$arch" == "aarch64" ]; then echo "uClibc-ng SHA1: $libc_sha1" >> $GITHUB_STEP_SUMMARY; fi
 fi
 git clone https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng-test.git
 if [ ! -z "$libc_test_sha1" ]; then
 	cd uclibc-ng-test; git checkout $libc_test_sha1; cd -
-	echo "uClibc-ng testsuite SHA1: $libc_test_sha1" >> $GITHUB_STEP_SUMMARY
+	if [ "$arch" == "aarch64" ]; then echo "uClibc-ng testsuite SHA1: $libc_test_sha1" >> $GITHUB_STEP_SUMMARY; fi
 fi
 build_dir=$PWD/build_$arch
 buildroot_defconfig=$(cat conf/$arch/buildroot_defconfig)
