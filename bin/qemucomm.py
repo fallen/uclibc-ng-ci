@@ -31,22 +31,25 @@ def handle(line, inpipe):
         if 'PASS ' in line:
             r = re.match("PASS (.*)", line)
             if r:
-                test_name = r.group(1)
+                test_name = r.group(1).split()[0]
                 test = TestCase(test_name, '', time.time())
                 test_cases.append(test)
 
         if 'FAIL ' in line:
             r = re.match("FAIL (.*)", line)
             if r:
-                test_name = r.group(1)
+                failure_line = r.group(1).split(' ', 1)
+                test_name = failure_line[0]
+                if len(failure_line) > 1:
+                    failure_msg = failure_line[1]
                 test = TestCase(test_name, '', time.time())
-                test.add_failure_info(message="FAIL")
+                test.add_failure_info(message="FAIL {}".format(failure_msg))
                 test_cases.append(test)
 
         if 'SKIP' in line:
             r = re.match("SKIP (.*)", line)
             if r:
-                test_name = r.group(1)
+                test_name = r.group(1).split()[0]
                 test = TestCase(test_name, '', time.time())
                 test.add_skipped_info(message="SKIP")
                 test_cases.append(test)
