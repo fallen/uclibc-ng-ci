@@ -6,8 +6,14 @@ ci_dir=$PWD
 build_dir=$PWD/build_$arch
 QEMU=$(cat conf/$arch/qemu)
 QEMU_OPTS=$(cat conf/$arch/qemu_opts)
+QEMU_PATH=$(cat conf/$arch/qemu_path)
 KERNEL=$(cat conf/$arch/kernel)
 LINUX_CMDLINE=$(cat conf/$arch/linux_cmdline)
+
+if [ ! -z "${QEMU_PATH}" ];
+then
+	QEMU=${QEMU_PATH}/${QEMU}
+fi
 
 mkdir -p $HOME/dl
 export BR2_DL_DIR=$HOME/dl
