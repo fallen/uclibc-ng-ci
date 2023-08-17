@@ -19,20 +19,38 @@ while getopts "a:l:t:b:" o; do
 done
 
 git clone git://git.busybox.net/buildroot
+cd buildroot
 if [ ! -z "$buildroot_sha1" ]; then
-	cd buildroot; git checkout $buildroot_sha1; cd -
-	if [ "$arch" == "aarch64" ]; then echo "Buildroot SHA1: $buildroot_sha1" >> $GITHUB_STEP_SUMMARY; fi
+	git checkout $buildroot_sha1
+else
+	buildroot_sha1=$(git rev-parse HEAD)
 fi
+cd -
+
 git clone https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git
+cd uclibc-ng
 if [ ! -z "$libc_sha1" ]; then
-	cd uclibc-ng; git checkout $libc_sha1; cd -
-	if [ "$arch" == "aarch64" ]; then echo "uClibc-ng SHA1: $libc_sha1" >> $GITHUB_STEP_SUMMARY; fi
+	git checkout $libc_sha1
+else
+	libc_sha1=$(git rev-parse HEAD)
 fi
+cd -
+
 git clone https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng-test.git
+cd uclibc-ng-test
 if [ ! -z "$libc_test_sha1" ]; then
-	cd uclibc-ng-test; git checkout $libc_test_sha1; cd -
-	if [ "$arch" == "aarch64" ]; then echo "uClibc-ng testsuite SHA1: $libc_test_sha1" >> $GITHUB_STEP_SUMMARY; fi
+	git checkout $libc_test_sha1
+else
+	libc_test_sha1=$(git rev-parse HEAD)
 fi
+cd -
+
+if [ "$arch" == "aarch64" ]; then
+	echo "uClibc-ng SHA1: $libc_sha1" >> $GITHUB_STEP_SUMMARY
+	echo "uClibc-ng testsuite SHA1: $libc_test_sha1" >> $GITHUB_STEP_SUMMARY
+	echo "Buildroot SHA1: $buildroot_sha1" >> $GITHUB_STEP_SUMMARY
+fi
+
 build_dir=$PWD/build_$arch
 buildroot_defconfig=$(cat conf/$arch/buildroot_defconfig)
 confdir=$PWD/conf/$arch/
