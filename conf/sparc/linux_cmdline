@@ -1,1 +1,1 @@
-root=/dev/sda console=ttyS0,115200
+rootwait root=/dev/sda console=ttyS0,115200
