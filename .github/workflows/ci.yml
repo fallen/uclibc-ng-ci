@@ -16,7 +16,7 @@ jobs:
     name: Build and valid
     strategy:
       matrix:
-        arch: [aarch64, armv7, amd64, mips32r6, or1k, powerpc, powerpc64, sparc]
+        arch: [aarch64, armv7, amd64, mips32r6, or1k, powerpc, powerpc64, sparc64]
     runs-on: ubuntu-latest
 
     steps:
