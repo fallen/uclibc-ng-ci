@@ -10,6 +10,8 @@ on:
         description: 'uClibc-ng-test testsuite SHA1 to run'
       buildroot_sha1:
         description: 'Buildroot SHA1 to build'
+      libc_git:
+        description: 'uClibc-ng git repo to use'
 
 jobs:
   build_and_valid:
@@ -26,7 +28,7 @@ jobs:
       - name: Install python3 junit_xml module
         run: sudo apt-get -y update; sudo apt-get install -y python3-junit.xml
       - name: Build
-        run: ./build.sh -a ${{ matrix.arch }} -l "${{ inputs.libc_sha1 }}" -t "${{ inputs.libc_test_sha1 }}" -b "${{ inputs.buildroot_sha1 }}"
+        run: ./build.sh -a ${{ matrix.arch }} -l "${{ inputs.libc_sha1 }}" -t "${{ inputs.libc_test_sha1 }}" -b "${{ inputs.buildroot_sha1 }}" -g "${{ inputs.libc_git }}"
       - name: Valid
         run: ./run.sh ${{ matrix.arch }}
       - name: Upload Test Results

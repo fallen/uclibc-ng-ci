@@ -1,7 +1,9 @@
 #!/bin/bash
 set -x
 
-while getopts "a:l:t:b:" o; do
+libc_git_official="https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git"
+
+while getopts "a:l:t:b:g:" o; do
 	case "${o}" in
 		a)
 			arch=${OPTARG}
@@ -15,8 +17,15 @@ while getopts "a:l:t:b:" o; do
 		b)
 			buildroot_sha1=${OPTARG}
 			;;
+		g)
+			libc_git=${OPTARG}
+			;;
 	esac
 done
+
+if [ -z "$libc_git" ]; then
+	libc_git=$libc_git_official
+fi
 
 git clone git://git.busybox.net/buildroot
 cd buildroot
@@ -27,7 +36,7 @@ else
 fi
 cd -
 
-git clone https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git
+git clone $libc_git
 cd uclibc-ng
 if [ ! -z "$libc_sha1" ]; then
 	git checkout $libc_sha1
@@ -49,6 +58,7 @@ if [ "$arch" == "aarch64" ]; then
 	echo "uClibc-ng SHA1: $libc_sha1" >> $GITHUB_STEP_SUMMARY
 	echo "uClibc-ng testsuite SHA1: $libc_test_sha1" >> $GITHUB_STEP_SUMMARY
 	echo "Buildroot SHA1: $buildroot_sha1" >> $GITHUB_STEP_SUMMARY
+	echo "uClibc-ng git repo: $libc_git" >> $GITHUB_STEP_SUMMARY
 fi
 
 build_dir=$PWD/build_$arch
