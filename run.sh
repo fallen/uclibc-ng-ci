@@ -10,9 +10,13 @@ QEMU_PATH=$(cat conf/$arch/qemu_path)
 KERNEL=$(cat conf/$arch/kernel)
 LINUX_CMDLINE=$(cat conf/$arch/linux_cmdline)
 
+if [ -f conf/$arch/get_qemu.sh ]; then
+	conf/$arch/get_qemu.sh
+fi
+
 if [ ! -z "${QEMU_PATH}" ];
 then
-	QEMU=${QEMU_PATH}/${QEMU}
+	QEMU=$(realpath ${QEMU_PATH}/${QEMU})
 fi
 
 mkdir -p $HOME/dl

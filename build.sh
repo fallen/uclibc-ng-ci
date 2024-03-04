@@ -23,17 +23,26 @@ while getopts "a:l:t:b:g:" o; do
 	esac
 done
 
+build_dir=$PWD/build_$arch
+buildroot_defconfig=$(cat conf/$arch/buildroot_defconfig)
+confdir=$PWD/conf/$arch/
+
 if [ -z "$libc_git" ]; then
 	libc_git=$libc_git_official
 fi
 
-git clone git://git.busybox.net/buildroot
-cd buildroot
-if [ ! -z "$buildroot_sha1" ]; then
-	git checkout $buildroot_sha1
+if [ -f $confdir/get_buildroot.sh ]; then
+	$confdir/get_buildroot.sh $buildroot_sha1
 else
-	buildroot_sha1=$(git rev-parse HEAD)
+	git clone git://git.busybox.net/buildroot
+	if [ ! -z "$buildroot_sha1" ]; then
+		cd buildroot
+		git checkout $buildroot_sha1
+		cd -
+	fi
 fi
+cd buildroot
+buildroot_sha1=$(git rev-parse HEAD) # translate from master to sha1
 cd -
 
 git clone $libc_git
@@ -60,10 +69,6 @@ if [ "$arch" == "aarch64" ]; then
 	echo "Buildroot SHA1: $buildroot_sha1" >> $GITHUB_STEP_SUMMARY
 	echo "uClibc-ng git repo: $libc_git" >> $GITHUB_STEP_SUMMARY
 fi
-
-build_dir=$PWD/build_$arch
-buildroot_defconfig=$(cat conf/$arch/buildroot_defconfig)
-confdir=$PWD/conf/$arch/
 
 mkdir -p $HOME/dl
 export BR2_DL_DIR=$HOME/dl
